@@ -35,7 +35,8 @@ export default function App() {
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder=""
+            placeholder="Buscar Pokémon"
+            placeholderTextColor="#888888"
             style={styles.searchInput}
           />
           <Ionicons name="mic-outline" size={20} color="#333" />
@@ -54,7 +55,30 @@ export default function App() {
           />
         </View>
       </View>
+
+      <View style={styles.navWrapper}>
+        <BottomNavigation />
+      </View>
     </SafeAreaView>
+  );
+}
+
+function BottomNavigation() {
+  return (
+    <View style={styles.navContainer}>
+      <View style={styles.navItemActive}>
+        <Ionicons name="list" size={24} color="#007AFF" />
+        <Text style={styles.navTextActive}>Pokemons</Text>
+      </View>
+      <View style={styles.navItem}>
+        <Ionicons name="book" size={24} color="#000" />
+        <Text style={styles.navText}>Dex</Text>
+      </View>
+      <View style={styles.navItem}>
+        <Ionicons name="person" size={24} color="#000" />
+        <Text style={styles.navText}>Profile</Text>
+      </View>
+    </View>
   );
 }
 
@@ -121,7 +145,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     overflow: 'hidden',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   listContent: {
     paddingVertical: 8,
@@ -166,5 +190,50 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
     marginLeft: 16,
     marginRight: 16,
+  },
+  navWrapper: {
+    paddingHorizontal: 22,
+    paddingBottom: 0,
+    backgroundColor: 'transparent',
+  },
+  navContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 40,
+    height: 76,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 80,
+    height: 60,
+  },
+  navItemActive: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#EDEDED',
+    width: 90,
+    height: 60,
+    borderRadius: 30,
+  },
+  navText: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#000',
+    marginTop: 4,
+  },
+  navTextActive: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#007AFF',
+    marginTop: 4,
   },
 });
