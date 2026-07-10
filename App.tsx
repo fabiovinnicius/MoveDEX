@@ -13,6 +13,104 @@ import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { POKEMON_LIST, Pokemon } from './pokemon';
 
+// ================= DADOS SIMULADOS =================
+const REGIONS = [
+  { id: '1', name: 'Kanto', desc: 'Pokémon Red/Blue/Yellow', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png' },
+  { id: '2', name: 'Johto', desc: 'Pokémon Gold/Silver/Crystal', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/155.png' },
+  { id: '3', name: 'Hoenn', desc: 'Pokémon Ruby/Sapphire/Emerald/FireRed', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/255.png' },
+  { id: '4', name: 'Sinnoh', desc: 'Pokémon Diamond/Pearl/Platinum', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/393.png' },
+  { id: '5', name: 'Unova', desc: 'Pokémon Black / White / Black 2 / White 2', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/495.png' },
+  { id: '6', name: 'Galar + Hisui', desc: 'Sword / Shield / Legends: Arceus', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/722.png' },
+];
+
+const KANTO_LEADERS = [
+  { 
+    id: '1', 
+    name: 'Brock', 
+    desc: 'Cidade de Pewter / Tipo: Pedra', 
+    image: 'https://play.pokemonshowdown.com/sprites/trainers/brock.png', 
+    color: '#D4C294',
+    about: 'Brock é o líder de academia do Pewter City Gym e é especialista em Pokémon do tipo Pedra. Ele dá a Insígnia da Rocha aos treinadores que o derrotam.',
+    mainType: { label: 'Pedra', color: '#795548' },
+    weaknesses: [
+      { label: 'Água', color: '#2196F3' },
+      { label: 'Planta', color: '#4CAF50' }
+    ],
+    reward: {
+      badgeName: 'Insígnia da Rocha',
+      badgeDesc: 'Pokémons até o nível 20 obedecem suas ordens',
+      tmType: 'Pedra',
+      tmTypeColor: '#795548',
+      tmName: 'TM34 Bide',
+      tmStats: 'PP: 10/10 POWER: - ACCURACY: 100'
+    },
+    pokemons: [
+      {
+        name: 'Geodude', id: '#074', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/74.png',
+        moves: [
+          { type: 'Normal', typeColor: '#9E9E9E', name: 'Investida', stats: 'PP: 35/35 POWER: 40 ACCURACY: 100' },
+        ]
+      },
+      {
+        name: 'Onix', id: '#095', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/95.png',
+        moves: [
+          { type: 'Normal', typeColor: '#9E9E9E', name: 'Investida', stats: 'PP: 35/35 POWER: 40 ACCURACY: 100' },
+          { type: 'Pedra', typeColor: '#795548', name: 'Aguardar', stats: 'PP: 10/10 POWER: - ACCURACY: 100' }
+        ]
+      }
+    ]
+  },
+  { 
+    id: '2', 
+    name: 'Misty', 
+    desc: 'Cidade de Cerulean / Tipo: Água', 
+    image: 'https://play.pokemonshowdown.com/sprites/trainers/misty.png',
+    color: '#92D2EF',
+    about: 'Misty é a líder de academia do Cerulean City Gym e é especialista em Pokémon do tipo Água e, portanto, a segunda em Kanto. Ela dá o Distintivo Cascade aos treinadores que a derrotam. Misty também é conhecida pelo título de A Sereia Tomboy.',
+    mainType: { label: 'Água', color: '#2196F3' },
+    weaknesses: [
+      { label: 'Planta', color: '#4CAF50' },
+      { label: 'Elétrico', color: '#FDD835' }
+    ],
+    reward: {
+      badgeName: 'Insígnia da Cascata',
+      badgeDesc: 'Pokémons até o nível 30 obedecem suas ordens',
+      tmType: 'Água',
+      tmTypeColor: '#2196F3',
+      tmName: "TM03 Pulso d'Água",
+      tmStats: 'PP: 5/5 POWER: 110 ACCURACY: 85'
+    },
+    pokemons: [
+      {
+        name: 'Staryu',
+        id: '#120',
+        image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/120.png',
+        moves: [
+          { type: 'Normal', typeColor: '#9E9E9E', name: 'Enfrentar', stats: 'PP: 5/5 POWER: 110 ACCURACY: 85' },
+          { type: 'Água', typeColor: '#2196F3', name: "Pulso d'Água", stats: 'PP: 5/5 POWER: 130 ACCURACY: 90' }
+        ]
+      },
+      {
+        name: 'Starmie',
+        id: '#121',
+        image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/121.png',
+        moves: [
+          { type: 'Normal', typeColor: '#9E9E9E', name: 'Giro Rápido', stats: 'PP: 15/15 POWER: 90 ACCURACY: 100' },
+          { type: 'Água', typeColor: '#2196F3', name: "Pulso d'Água", stats: 'PP: 5/5 POWER: 130 ACCURACY: 90' },
+          { type: 'Normal', typeColor: '#9E9E9E', name: 'Rápido', stats: 'PP: 5/5 POWER: 110 ACCURACY: 85' },
+          { type: 'Água', typeColor: '#2196F3', name: 'Raio de bolhas', stats: 'PP: 5/5 POWER: 120 ACCURACY: 90' }
+        ]
+      }
+    ]
+  },
+  { id: '3', name: 'Lt Surge', desc: 'Cidade de Vermilion / Tipo: Elétrico', image: 'https://play.pokemonshowdown.com/sprites/trainers/ltsurge.png' },
+  { id: '4', name: 'Erika', desc: 'Cidade de Celadon / Tipo: Planta', image: 'https://play.pokemonshowdown.com/sprites/trainers/erika.png' },
+  { id: '5', name: 'Koga', desc: 'Cidade de Fuchsia / Tipo: Veneno', image: 'https://play.pokemonshowdown.com/sprites/trainers/koga.png' },
+  { id: '6', name: 'Sabrina', desc: 'Cidade de Saffron / Tipo: Psíquico', image: 'https://play.pokemonshowdown.com/sprites/trainers/sabrina.png' },
+  { id: '7', name: 'Blaine', desc: 'Ilha de Cinnabar / Tipo: Fogo', image: 'https://play.pokemonshowdown.com/sprites/trainers/blaine.png' },
+];
+// ===================================================
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('Pokemons');
 
@@ -20,6 +118,15 @@ export default function App() {
     <View style={[styles.safeArea, activeTab === 'Dex' && { backgroundColor: '#E4B688' }]}>
       {activeTab === 'Pokemons' && <HomeScreen />}
       {activeTab === 'Dex' && <DexScreen />}
+      {activeTab === 'Lideres' && <LideresScreen />}
+      {activeTab === 'Ajustes' && (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Ajustes</Text>
+            <Text style={styles.subtitle}>Em breve...</Text>
+          </View>
+        </View>
+      )}
       
       <View style={styles.navWrapper}>
         <BottomNavigation activeTab={activeTab} onChangeTab={setActiveTab} />
@@ -70,6 +177,176 @@ function HomeScreen() {
           contentContainerStyle={styles.listContent}
         />
       </View>
+    </View>
+  );
+}
+
+function LideresScreen() {
+  const [selectedRegion, setSelectedRegion] = useState<any>(null);
+  const [selectedLeader, setSelectedLeader] = useState<any>(null);
+  const [query, setQuery] = useState('');
+
+  const data = selectedRegion ? KANTO_LEADERS : REGIONS;
+  
+  const filteredData = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return data;
+    return data.filter(item => item.name.toLowerCase().includes(normalized));
+  }, [query, data]);
+
+  if (selectedLeader) {
+    return <LeaderDetailScreen leader={selectedLeader} onBack={() => setSelectedLeader(null)} />;
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>MoveDex</Text>
+        <Text style={styles.subtitle}>Listagem de informações</Text>
+      </View>
+
+      <View style={styles.searchBar}>
+        <Ionicons name="search-outline" size={20} color="#333" />
+        <TextInput
+          value={query}
+          onChangeText={setQuery}
+          placeholder={selectedRegion ? "Buscar Líder" : "Buscar Região"}
+          placeholderTextColor="#888888"
+          style={styles.searchInput}
+        />
+        <Ionicons name="mic-outline" size={20} color="#333" />
+      </View>
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+        {selectedRegion && (
+          <TouchableOpacity onPress={() => setSelectedRegion(null)} style={[styles.backButtonCircle, { marginRight: 12 }]}>
+            <Ionicons name="chevron-back" size={26} color="#000" />
+          </TouchableOpacity>
+        )}
+        <Text style={[styles.sectionLabel, { marginBottom: 0 }]}>
+          {selectedRegion ? 'Líderes de Ginásio' : 'Regiões'}
+        </Text>
+      </View>
+
+      <View style={[styles.listContainer, { marginBottom: 110 }]}>
+        <FlatList
+          data={filteredData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <GenericRow 
+              title={item.name} 
+              subtitle={item.desc} 
+              imageUrl={item.image} 
+              onPress={() => {
+                if (!selectedRegion) setSelectedRegion(item);
+                else setSelectedLeader(item);
+              }} 
+            />
+          )}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+        />
+      </View>
+    </View>
+  );
+}
+
+function LeaderDetailScreen({ leader, onBack }: any) {
+  if (!leader.about) {
+    return (
+      <View style={{ flex: 1, backgroundColor: leader.color || '#92D2EF' }}>
+        <TouchableOpacity style={[styles.backButtonCircle, { position: 'absolute', top: 55, left: 22, zIndex: 10 }]} onPress={onBack}>
+          <Ionicons name="chevron-back" size={26} color="#000" />
+        </TouchableOpacity>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Detalhes em construção...</Text>
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1, backgroundColor: leader.color }}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.dexScrollView}>
+        
+        <View style={styles.leaderScrollHeader}>
+          <TouchableOpacity style={[styles.backButtonCircle, styles.backButtonFixed]} onPress={onBack}>
+            <Ionicons name="chevron-back" size={26} color="#000" />
+          </TouchableOpacity>
+          
+          <View style={styles.leaderImageWrapper}>
+            <Image 
+              source={{ uri: leader.image }} 
+              style={styles.leaderMainImage} 
+              resizeMode="contain"
+            />
+          </View>
+          
+          <View style={styles.leaderTitleContainer}>
+            <Text style={styles.leaderTitle}>{leader.name}</Text>
+            <Text style={styles.leaderSubtitleText}>Líder de Ginásio</Text>
+          </View>
+        </View>
+        
+        <View style={styles.dexCard}>
+          <Text style={styles.dexSectionTitle}>Descrição</Text>
+          <Text style={styles.dexDescription}>{leader.about}</Text>
+
+          <View style={styles.dexTypesRow}>
+            <View style={styles.dexTypeCol}>
+              <Text style={styles.dexSectionTitle}>Tipo principal</Text>
+              <View style={styles.badgesRow}>
+                <Badge label={leader.mainType.label} color={leader.mainType.color} />
+              </View>
+            </View>
+            <View style={styles.dexTypeCol}>
+              <Text style={styles.dexSectionTitle}>Fraco contra</Text>
+              <View style={styles.badgesRow}>
+                {leader.weaknesses.map((w: any, index: number) => (
+                  <Badge key={index} label={w.label} color={w.color} />
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <Text style={styles.dexSectionTitle}>Recompensa por vitória</Text>
+          <View style={styles.rewardCard}>
+            <Text style={styles.rewardTitle}>{leader.reward.badgeName}</Text>
+            <Text style={styles.rewardSubtitle}>{leader.reward.badgeDesc}</Text>
+            <View style={styles.horizontalSeparator} />
+            <View style={styles.rewardMoveRow}>
+              <Badge label={leader.reward.tmType} color={leader.reward.tmTypeColor} />
+              <Text style={styles.rewardMoveName}>{leader.reward.tmName}</Text>
+            </View>
+            <Text style={styles.rewardMoveStats}>{leader.reward.tmStats}</Text>
+          </View>
+
+          <Text style={styles.dexSectionTitle}>Pokémons utilizados</Text>
+          {leader.pokemons.map((poke: any, idx: number) => (
+            <View key={idx} style={styles.teamCard}>
+              <View style={styles.teamLeftCol}>
+                <Image source={{ uri: poke.image }} style={styles.teamSprite} resizeMode="contain" />
+                <Text style={styles.teamName}>{poke.name}</Text>
+                <Text style={styles.teamId}>{poke.id}</Text>
+              </View>
+              <View style={styles.teamRightColHorizontal}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {poke.moves.map((move: any, moveIdx: number) => (
+                    <View key={moveIdx} style={styles.teamMoveCardHorizontal}>
+                      <View style={styles.teamMoveHeaderHorizontal}>
+                        <Badge label={move.type} color={move.typeColor} />
+                      </View>
+                      <Text style={styles.teamMoveNameHorizontal} numberOfLines={1}>{move.name}</Text>
+                      <Text style={styles.teamMoveStatsHorizontal}>{move.stats}</Text>
+                    </View>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -189,7 +466,7 @@ function BottomNavigation({ activeTab, onChangeTab }: any) {
           size={24} 
           color={activeTab === 'Pokemons' ? '#007AFF' : '#000'} 
         />
-        <Text style={activeTab === 'Pokemons' ? styles.navTextActive : styles.navText}>Pokemons</Text>
+        <Text style={activeTab === 'Pokemons' ? styles.navTextActive : styles.navText}>Pokémons</Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
@@ -205,38 +482,60 @@ function BottomNavigation({ activeTab, onChangeTab }: any) {
       </TouchableOpacity>
       
       <TouchableOpacity 
-        style={activeTab === 'Profile' ? styles.navItemActive : styles.navItem}
-        onPress={() => onChangeTab('Profile')}
+        style={activeTab === 'Lideres' ? styles.navItemActive : styles.navItem}
+        onPress={() => onChangeTab('Lideres')}
       >
         <Ionicons 
-          name={activeTab === 'Profile' ? 'person' : 'person-outline'} 
+          name={activeTab === 'Lideres' ? 'people' : 'people-outline'} 
           size={24} 
-          color={activeTab === 'Profile' ? '#007AFF' : '#000'} 
+          color={activeTab === 'Lideres' ? '#007AFF' : '#000'} 
         />
-        <Text style={activeTab === 'Profile' ? styles.navTextActive : styles.navText}>Profile</Text>
+        <Text style={activeTab === 'Lideres' ? styles.navTextActive : styles.navText}>Líderes</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity 
+        style={activeTab === 'Ajustes' ? styles.navItemActive : styles.navItem}
+        onPress={() => onChangeTab('Ajustes')}
+      >
+        <Ionicons 
+          name={activeTab === 'Ajustes' ? 'settings' : 'settings-outline'} 
+          size={24} 
+          color={activeTab === 'Ajustes' ? '#007AFF' : '#000'} 
+        />
+        <Text style={activeTab === 'Ajustes' ? styles.navTextActive : styles.navText}>Ajustes</Text>
       </TouchableOpacity>
     </BlurView>
   );
 }
 
-function PokemonRow({ pokemon }: { pokemon: Pokemon }) {
+function GenericRow({ title, subtitle, imageUrl, onPress }: any) {
   return (
-    <View style={styles.row}>
+    <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={onPress ? 0.7 : 1}>
       <View style={styles.spriteContainer}>
-        <Image source={{ uri: pokemon.spriteUrl }} style={styles.sprite} />
+        <Image source={{ uri: imageUrl }} style={styles.sprite} resizeMode="contain" />
       </View>
       <View style={styles.infoContainer}>
-        <Text style={styles.pokemonName}>{pokemon.name}</Text>
-        <Text style={styles.pokemonId}>#{pokemon.id}</Text>
+        <Text style={styles.pokemonName}>{title}</Text>
+        <Text style={styles.pokemonId}>{subtitle}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
+  );
+}
+
+function PokemonRow({ pokemon }: { pokemon: Pokemon }) {
+  return (
+    <GenericRow 
+      title={pokemon.name} 
+      subtitle={`#${pokemon.id}`} 
+      imageUrl={pokemon.spriteUrl} 
+    />
   );
 }
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F9E8DA',
+    backgroundColor: '#F2F2F2',
   },
   container: {
     flex: 1,
@@ -259,7 +558,7 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3D8C3',
+    backgroundColor: '#E8E8E8',
     borderRadius: 24,
     paddingHorizontal: 16,
     height: 48,
@@ -328,6 +627,8 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginRight: 16,
   },
+  
+  // --- Estilos compartilhados e da Dex ---
   dexContainer: {
     flex: 1,
   },
@@ -425,6 +726,144 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
+
+  // --- Estilos da tela de Detalhes do Líder ---
+  leaderScrollHeader: {
+    paddingTop: 55, 
+    paddingBottom: 20,
+    paddingHorizontal: 22,
+  },
+  backButtonFixed: {
+    marginBottom: 10,
+  },
+  leaderImageWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20, 
+  },
+  leaderMainImage: {
+    width: 280, 
+    height: 280,
+  },
+  leaderTitleContainer: {
+    alignItems: 'flex-start',
+  },
+  leaderTitle: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  leaderSubtitleText: {
+    fontSize: 16,
+    color: '#333333',
+    marginTop: 4,
+  },
+  rewardCard: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#EEEEEE',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 24,
+  },
+  rewardTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1A1A1A',
+    marginBottom: 4,
+  },
+  rewardSubtitle: {
+    fontSize: 12,
+    color: '#888888',
+    fontWeight: '500',
+    marginBottom: 12,
+  },
+  horizontalSeparator: {
+    height: 1,
+    backgroundColor: '#F0F0F0',
+    marginBottom: 12,
+  },
+  rewardMoveRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 4,
+  },
+  rewardMoveName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#1A1A1A',
+  },
+  rewardMoveStats: {
+    fontSize: 11,
+    color: '#888888',
+    fontWeight: '600',
+  },
+  
+  // -- Estilos do Card da Equipe (com scroll horizontal pros movimentos) --
+  teamCard: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#EEEEEE',
+    borderRadius: 16,
+    paddingVertical: 16, 
+    paddingLeft: 16,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  teamLeftCol: {
+    alignItems: 'center',
+    width: 80,
+  },
+  teamSprite: {
+    width: 70,
+    height: 70,
+    marginBottom: 8,
+  },
+  teamName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#1A1A1A',
+    textAlign: 'center',
+  },
+  teamId: {
+    fontSize: 12,
+    color: '#999999',
+    textAlign: 'center',
+  },
+  teamRightColHorizontal: {
+    flex: 1,
+  },
+  teamMoveCardHorizontal: {
+    backgroundColor: '#FAFAFA',
+    borderWidth: 1,
+    borderColor: '#EEEEEE',
+    borderRadius: 12,
+    padding: 12,
+    marginRight: 10,
+    width: 145, 
+    justifyContent: 'center',
+  },
+  teamMoveHeaderHorizontal: {
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  teamMoveNameHorizontal: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#1A1A1A',
+    marginBottom: 4,
+  },
+  teamMoveStatsHorizontal: {
+    fontSize: 10,
+    color: '#888888',
+    fontWeight: '600',
+    lineHeight: 14,
+  },
+
+  // --- Outros ---
   evolutionsContainer: {
     marginBottom: 24,
     height: 155, 
@@ -514,14 +953,14 @@ const styles = StyleSheet.create({
   navItem: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 85, 
+    width: 70,
     height: 60,
   },
   navItemActive: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DEDEDE',
-    width: 85, 
+    width: 70, 
     height: 60,
     borderRadius: 30,
   },
@@ -536,5 +975,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#007AFF',
     marginTop: 4,
+  },
+  
+  // --- Botão de Voltar Redondo ---
+  backButtonCircle: {
+    width: 35,
+    height: 35,
+    borderRadius: 22,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 5,
   },
 });
