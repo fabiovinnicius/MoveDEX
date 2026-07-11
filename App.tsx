@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Switch,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -119,18 +120,220 @@ export default function App() {
       {activeTab === 'Pokemons' && <HomeScreen />}
       {activeTab === 'Dex' && <DexScreen />}
       {activeTab === 'Lideres' && <LideresScreen />}
-      {activeTab === 'Ajustes' && (
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Ajustes</Text>
-            <Text style={styles.subtitle}>Em breve...</Text>
-          </View>
-        </View>
-      )}
+      {activeTab === 'Ajustes' && <AjustesScreen />}
       
       <View style={styles.navWrapper}>
         <BottomNavigation activeTab={activeTab} onChangeTab={setActiveTab} />
       </View>
+    </View>
+  );
+}
+
+function AjustesScreen() {
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+
+  // Estados falsos para as configurações
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [language, setLanguage] = useState('PT-BR');
+  const [measureSystem, setMeasureSystem] = useState('Métrico');
+  const [textSize, setTextSize] = useState('Normal');
+  const [isBoldText, setIsBoldText] = useState(false);
+
+  const toggleSection = (section: string) => {
+    if (expandedSection === section) {
+      setExpandedSection(null);
+    } else {
+      setExpandedSection(section);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>MoveDex</Text>
+        <Text style={styles.settingsTitle}>Ajustes</Text>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.settingsCard}>
+          
+          {/* === FAVORITOS === */}
+          <TouchableOpacity 
+            style={styles.settingsMenuItem} 
+            activeOpacity={0.7}
+            onPress={() => toggleSection('favoritos')}
+          >
+            <Text style={styles.settingsMenuText}>Favoritos</Text>
+            <Ionicons 
+              name={expandedSection === 'favoritos' ? "chevron-down" : "chevron-forward"} 
+              size={20} 
+              color="#000" 
+            />
+          </TouchableOpacity>
+
+          {expandedSection === 'favoritos' && (
+            <View style={styles.expandedContent}>
+              <View style={styles.favoritesRow}>
+                <View style={styles.favoriteItem}>
+                  <Image source={{ uri: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png' }} style={styles.favoriteSprite} resizeMode="contain" />
+                </View>
+                <View style={styles.favoriteItem}>
+                  <Image source={{ uri: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png' }} style={styles.favoriteSprite} resizeMode="contain" />
+                </View>
+                <View style={styles.favoriteItem}>
+                  <Image source={{ uri: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png' }} style={styles.favoriteSprite} resizeMode="contain" />
+                </View>
+              </View>
+            </View>
+          )}
+
+          <View style={styles.settingsSeparator} />
+          
+          {/* === CONFIGURAÇÕES === */}
+          <TouchableOpacity 
+            style={styles.settingsMenuItem} 
+            activeOpacity={0.7}
+            onPress={() => toggleSection('configuracoes')}
+          >
+            <Text style={styles.settingsMenuText}>Configurações</Text>
+            <Ionicons 
+              name={expandedSection === 'configuracoes' ? "chevron-down" : "chevron-forward"} 
+              size={20} 
+              color="#000" 
+            />
+          </TouchableOpacity>
+          
+          {expandedSection === 'configuracoes' && (
+            <View style={styles.expandedConfigContent}>
+              
+              {/* Tema Escuro */}
+              <View style={styles.configRow}>
+                <View style={styles.configInfo}>
+                  <Ionicons name="moon" size={20} color="#555" />
+                  <Text style={styles.configLabel}>Tema Escuro</Text>
+                </View>
+                <Switch
+                  trackColor={{ false: "#D1D1D6", true: "#34C759" }}
+                  thumbColor={"#FFFFFF"}
+                  onValueChange={setIsDarkMode}
+                  value={isDarkMode}
+                />
+              </View>
+
+              {/* Áudio */}
+              <View style={styles.configRow}>
+                <View style={styles.configInfo}>
+                  <Ionicons name="volume-high" size={20} color="#555" />
+                  <Text style={styles.configLabel}>Sons dos Pokémons</Text>
+                </View>
+                <Switch
+                  trackColor={{ false: "#D1D1D6", true: "#34C759" }}
+                  thumbColor={"#FFFFFF"}
+                  onValueChange={setSoundEnabled}
+                  value={soundEnabled}
+                />
+              </View>
+
+              {/* Textos em Negrito */}
+              <View style={styles.configRow}>
+                <View style={styles.configInfo}>
+                  <Ionicons name="text" size={20} color="#555" />
+                  <Text style={styles.configLabel}>Textos em Negrito</Text>
+                </View>
+                <Switch
+                  trackColor={{ false: "#D1D1D6", true: "#34C759" }}
+                  thumbColor={"#FFFFFF"}
+                  onValueChange={setIsBoldText}
+                  value={isBoldText}
+                />
+              </View>
+
+              {/* Idioma */}
+              <View style={styles.configColumn}>
+                <Text style={styles.configLabelMargin}>Idioma dos Golpes</Text>
+                <View style={styles.segmentedControl}>
+                  <TouchableOpacity 
+                    style={[styles.segmentButton, language === 'PT-BR' && styles.segmentButtonActive]}
+                    onPress={() => setLanguage('PT-BR')}
+                  >
+                    <Text style={[styles.segmentText, language === 'PT-BR' && styles.segmentTextActive]}>PT-BR</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={[styles.segmentButton, language === 'EN-US' && styles.segmentButtonActive]}
+                    onPress={() => setLanguage('EN-US')}
+                  >
+                    <Text style={[styles.segmentText, language === 'EN-US' && styles.segmentTextActive]}>EN-US</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* Medidas */}
+              <View style={styles.configColumn}>
+                <Text style={styles.configLabelMargin}>Sistema de Medidas</Text>
+                <View style={styles.segmentedControl}>
+                  <TouchableOpacity 
+                    style={[styles.segmentButton, measureSystem === 'Métrico' && styles.segmentButtonActive]}
+                    onPress={() => setMeasureSystem('Métrico')}
+                  >
+                    <Text style={[styles.segmentText, measureSystem === 'Métrico' && styles.segmentTextActive]}>Métrico</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={[styles.segmentButton, measureSystem === 'Imperial' && styles.segmentButtonActive]}
+                    onPress={() => setMeasureSystem('Imperial')}
+                  >
+                    <Text style={[styles.segmentText, measureSystem === 'Imperial' && styles.segmentTextActive]}>Imperial</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* Tamanho do Texto */}
+              <View style={styles.configColumn}>
+                <Text style={styles.configLabelMargin}>Tamanho do Texto</Text>
+                <View style={styles.segmentedControl}>
+                  {['Pequeno', 'Normal', 'Grande'].map((size) => (
+                    <TouchableOpacity 
+                      key={size}
+                      style={[styles.segmentButton, textSize === size && styles.segmentButtonActive]}
+                      onPress={() => setTextSize(size)}
+                    >
+                      <Text style={[styles.segmentText, textSize === size && styles.segmentTextActive]}>
+                        {size}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+            </View>
+          )}
+
+          <View style={styles.settingsSeparator} />
+          
+          {/* === SOBRE === */}
+          <TouchableOpacity 
+            style={styles.settingsMenuItem} 
+            activeOpacity={0.7}
+            onPress={() => toggleSection('sobre')}
+          >
+            <Text style={styles.settingsMenuText}>Sobre</Text>
+            <Ionicons 
+              name={expandedSection === 'sobre' ? "chevron-down" : "chevron-forward"} 
+              size={20} 
+              color="#000" 
+            />
+          </TouchableOpacity>
+          
+          {expandedSection === 'sobre' && (
+            <View style={styles.expandedContent}>
+              <Text style={styles.dummyText}>
+                MoveDex v1.0.0{'\n'}Desenvolvido em React Native por {'\n'}Fábio Vinnicius {':)'}
+              </Text>
+            </View>
+          )}
+
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -456,7 +659,7 @@ function MoveCard({ type, typeColor, name, pp, power, accuracy }: any) {
 
 function BottomNavigation({ activeTab, onChangeTab }: any) {
   return (
-    <BlurView intensity={90} tint="light" style={styles.navContainer}>
+    <BlurView intensity={100} tint="light" style={styles.navContainer}>
       <TouchableOpacity 
         style={activeTab === 'Pokemons' ? styles.navItemActive : styles.navItem}
         onPress={() => onChangeTab('Pokemons')}
@@ -800,7 +1003,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   
-  // -- Estilos do Card da Equipe (com scroll horizontal pros movimentos) --
+  // -- Estilos do Card da Equipe --
   teamCard: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
@@ -929,6 +1132,8 @@ const styles = StyleSheet.create({
     color: '#888888',
     fontWeight: '500',
   },
+
+  // --- EFEITO LIQUID GLASS (BOTTOM NAVIGATION) ---
   navWrapper: {
     paddingHorizontal: 22,
     paddingBottom: 28,
@@ -937,41 +1142,51 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    elevation: 10,
   },
   navContainer: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.65)',
     borderRadius: 40,
     height: 76,
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 12, 
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.4)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
   },
   navItem: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 70,
+    width: 75, 
     height: 60,
   },
   navItemActive: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DEDEDE',
-    width: 70, 
+    backgroundColor: '#FFFFFF',
+    width: 75, 
     height: 60,
     borderRadius: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   navText: {
-    fontSize: 13,
+    fontSize: 12, 
     fontWeight: '500',
-    color: '#000',
+    color: '#333',
     marginTop: 4,
   },
   navTextActive: {
-    fontSize: 13,
+    fontSize: 12, 
     fontWeight: 'bold',
     color: '#007AFF',
     marginTop: 4,
@@ -979,8 +1194,8 @@ const styles = StyleSheet.create({
   
   // --- Botão de Voltar Redondo ---
   backButtonCircle: {
-    width: 35,
-    height: 35,
+    width: 44,
+    height: 44,
     borderRadius: 22,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
@@ -990,5 +1205,120 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 5,
+  },
+
+  // --- Estilos da tela de Ajustes ---
+  settingsTitle: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  settingsCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 24, 
+    paddingVertical: 8, 
+    paddingHorizontal: 24, 
+    marginBottom: 110,
+  },
+  favoritesRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  favoriteItem: {
+    width: 60,
+    height: 60,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#EEEEEE',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  favoriteSprite: {
+    width: 48,
+    height: 48,
+  },
+  settingsSeparator: {
+    height: 1,
+    backgroundColor: '#F0F0F0',
+  },
+  settingsMenuItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 20, 
+  },
+  settingsMenuText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000000',
+  },
+  expandedContent: {
+    paddingBottom: 20,
+  },
+  dummyText: {
+    fontSize: 14,
+    color: '#666666',
+    lineHeight: 20,
+  },
+
+  // --- Estilos de Configurações Expandidas ---
+  expandedConfigContent: {
+    paddingBottom: 24,
+    paddingTop: 8, 
+    gap: 24, 
+  },
+  configRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  configInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  configLabel: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: '#333333',
+  },
+  configColumn: {
+    gap: 10,
+  },
+  configLabelMargin: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: '#333333',
+    marginBottom: 4,
+  },
+  segmentedControl: {
+    flexDirection: 'row',
+    backgroundColor: '#F2F2F7', 
+    borderRadius: 8,
+    padding: 3,
+  },
+  segmentButton: {
+    flex: 1,
+    paddingVertical: 8,
+    alignItems: 'center',
+    borderRadius: 6,
+  },
+  segmentButtonActive: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  segmentText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#8E8E93', 
+  },
+  segmentTextActive: {
+    color: '#000000',
+    fontWeight: 'bold',
   },
 });
