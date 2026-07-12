@@ -1,65 +1,67 @@
 # MoveDex
 
-> Um app de referência de movimentos Pokémon, pensado para acabar com a bagunça de abas abertas em wikis e fóruns na hora de montar um time competitivo.
+> O seu companheiro definitivo para a jornada Pokémon. Projetado com foco em acessibilidade, velocidade e experiência do usuário.
 
-## 📱 Sobre o projeto
+[![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-1B1F23?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![PokeAPI](https://img.shields.io/badge/PokeAPI-FF0000?style=for-the-badge&logo=pokemon&logoColor=white)](https://pokeapi.co/)
 
-O MoveDex nasceu de uma pergunta simples: como ajudar jogadores de Pokémon — principalmente os iniciantes — a escolher os melhores movimentos para seus Pokémon em cada jogo da franquia?
+---
 
-A proposta é transformar um grande volume de dados complexos do jogo (tipos, fraquezas, evoluções, movimentos recomendados e não recomendados) em uma interface limpa, rápida e otimizada para mobile.
+## Sobre o Projeto
 
-## 🔍 Por que esse projeto existe
+**MoveDex** é um aplicativo mobile desenvolvido em React Native (com Expo) que vai muito além de uma Pokédex tradicional. Ele foi criado para fornecer informações táticas em tempo real para treinadores, desde as fraquezas e vantagens de tipos de um Pokémon até dados detalhados sobre os Líderes de Ginásio, Elite dos Quatro e NPCs úteis espalhados pelas regiões.
 
-A pesquisa (desk research em wikis, fóruns e sites especializados como Bulbapedia, Smogon, PokéCommunity e Reddit) apontou um padrão claro:
+O aplicativo se destaca por seu **robusto sistema de configurações e acessibilidade**, permitindo que o usuário personalize a interface com textos maiores, fontes em negrito, alternância de temas (Claro/Escuro) e suporte nativo a múltiplos idiomas.
 
-- Jogadores iniciantes e competitivos usam as mesmas fontes, mas iniciantes sentem mais dificuldade para interpretar as informações.
-- A principal dor não é falta de dado — é excesso de dado mal organizado, cheio de termos técnicos, espalhado em várias abas.
-- A finalidade final é sempre a mesma: montar estratégias melhores e ter mais confiança na escolha de movimentos.
+## Principais Funcionalidades
 
-O MoveDex ataca esse problema centralizando tudo em um só lugar, com busca preditiva e filtragem inteligente por geração do jogo.
+### Pokédex Avançada
+- **Busca Rápida e Filtros:** Pesquise Pokémons por nome ou filtre por seus respectivos tipos (Água, Fogo, Planta, etc).
+- **Detalhes Completos:** Visualize altura, peso, linha evolutiva completa e estatísticas baseadas nos jogos clássicos.
+- **Vantagens e Fraquezas:** Cálculo dinâmico das vantagens e fraquezas de tipo de cada Pokémon.
+- **Movimentos (Moves):** Listagem dos movimentos mais e menos utilizados por cada Pokémon, filtrados pela geração selecionada.
+- **Gritos (Cries):** Ouça o som autêntico de cada Pokémon diretamente no app.
 
-## ✨ Funcionalidades planejadas
+### Área de Líderes e Regiões
+- **Times e Recompensas:** Descubra os Pokémons utilizados por cada Líder de Ginásio, Elite 4 e Campeão (atualmente suportando a região de Kanto).
+- **Dados Estratégicos:** Identifique as fraquezas do time adversário antes de batalhar e saiba quais Insígnias e TMs você receberá de recompensa.
+- **NPCs Úteis:** Localize o Name Rater, Move Deleter e o Daycare facilmente pelo mapa.
 
-- [ ] Lista de Pokémon com busca preditiva
-- [ ] Filtro por geração do jogo
-- [ ] Tela de detalhes: tipo, fraquezas, evoluções
-- [ ] Movimentos mais usados vs. menos recomendados, com explicação curta do porquê
-- [ ] Times/favoritos salvos localmente
-- [ ] Suporte a Dynamic Type e VoiceOver (acessibilidade desde o início)
+### Acessibilidade e Configurações (Persistidas offline)
+- **Modo Claro / Escuro:** Ajuste automático baseado no tema escolhido.
+- **i18n (Internacionalização):** Troca de idioma em tempo real (Português do Brasil ↔ Inglês) cobrindo toda a interface, descrições de Pokémons e nomes de ataques.
+- **Acessibilidade Visual:** Opções para aumentar o tamanho de todos os textos (Large Text) e forçar o uso de negrito (Bold Text) para melhor leitura.
+- **Sistema de Favoritos:** Salve seus Pokémons preferidos e acesse-os rapidamente.
 
-## 🎨 Design
+## Tecnologias Utilizadas
 
-Protótipo em Figma: [MoveDex — Figma](https://www.figma.com/design/BkTtUuVfFGSydME92HdA87/MoveDex)
+O projeto foi construído utilizando as melhores e mais modernas ferramentas do ecossistema front-end mobile:
 
-> Nota de evolução: as primeiras telas têm uma inconsistência proposital entre a lista (dark) e o detalhe (light peach) que está sendo revisada para um único design system coerente, com tokens compartilhados entre os dois modos.
+- **[React Native](https://reactnative.dev/):** Framework para construção de interfaces nativas.
+- **[Expo](https://expo.dev/):** Plataforma para desenvolvimento, build e deploy universal.
+- **[TypeScript](https://www.typescriptlang.org/):** Tipagem estática para um código mais seguro e manutenível.
+- **[React Navigation](https://reactnavigation.org/):** Navegação fluída entre abas (Bottom Tabs) e pilhas (Native Stack).
+- **[Expo AV](https://docs.expo.dev/versions/latest/sdk/audio/):** Para reprodução assíncrona e otimizada dos sons dos Pokémons.
+- **[AsyncStorage](https://react-native-async-storage.github.io/async-storage/):** Armazenamento local leve para persistir configurações e favoritos.
+- **[PokeAPI](https://pokeapi.co/):** API RESTful consumida para dados dinâmicos dos Pokémons.
 
-## 🛠 Stack técnica
+## Como Executar o Projeto
 
-**Proposta inicial: React Native + Expo**
+Certifique-se de ter o [Node.js](https://nodejs.org/) e o [Expo CLI](https://docs.expo.dev/get-started/installation/) instalados em sua máquina.
 
-Motivo: o desenvolvimento é mobile-first desde o início, mas sem Mac disponível para um pipeline Swift/Xcode nativo. Com Expo é possível:
+```bash
+# 1. Clone este repositório
+$ git clone https://github.com/SEU_USUARIO/movedex.git
 
-- Programar e testar o app ao vivo no próprio iPhone, via app Expo Go, sem precisar compilar localmente.
-- Manter portabilidade (o mesmo código roda em iOS e Android).
-- Fazer o build final para a App Store futuramente através do EAS Build (build na nuvem), sem depender de hardware Mac.
+# 2. Acesse a pasta do projeto
+$ cd movedex
 
-Fonte de dados planejada: [PokéAPI](https://pokeapi.co/) (dados públicos e completos de todas as gerações), com uma camada de cache/local para busca rápida.
+# 3. Instale as dependências
+$ npm install
+# ou
+$ yarn install
 
-## 📋 Status atual
-
-- [x] Pesquisa e investigação inicial
-- [x] Protótipo de design em Figma
-- [ ] Setup do projeto (Expo)
-- [ ] Modelagem de dados (integração PokéAPI)
-- [ ] Implementação da lista + busca preditiva
-- [ ] Implementação da tela de detalhes
-- [ ] Design system consolidado (tokens compartilhados entre light/dark)
-- [ ] Acessibilidade (Dynamic Type, VoiceOver, contraste WCAG)
-
-## 🎓 Contexto
-
-Projeto autoral, usado como peça de portfólio.
-
-## 📄 Licença
-
-A definir.
+# 4. Inicie o servidor do Expo
+$ npx expo start
