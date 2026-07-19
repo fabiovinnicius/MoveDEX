@@ -17,7 +17,7 @@ const uiDict = {
     searchRegion: 'Buscar Região', regions: 'Regiões', gymLeaders: 'Líderes de Ginásio', eliteFour: 'Elite dos Quatro & Campeão',
     usefulNpcs: 'NPCs Úteis', underConst: 'Em Construção', detailsConst: 'Detalhes em construção...',
     desc: 'Descrição', location: 'Localização', serviceCost: 'Serviço / Custo', cost: 'Custo', mainType: 'Tipo principal',
-    reward: 'Recompensa por vitória', pkmnUsed: 'Pokémons utilizados', settingsProfile: 'Ajustes e Perfil',
+    reward: 'Recompensa por vitória', pkmnUsed: 'Pokémons utilizados', settingsProfile: 'Ajustes',
     myFavs: 'Meus Favoritos', noFavs: 'Nenhum favorito salvo ainda.', settings: 'Configurações', darkTheme: 'Tema Escuro',
     cries: 'Sons dos Pokémons', boldText: 'Textos em Negrito', largerText: 'Textos Maiores', showWeight: 'Peso/Altura na Dex',
     language: 'Idioma da Interface e Golpes', about: 'Sobre', navPkmn: 'Pokémons', navDex: 'Dex', navLeaders: 'Líderes', navSettings: 'Ajustes',
@@ -31,9 +31,9 @@ const uiDict = {
     searchRegion: 'Search Region', regions: 'Regions', gymLeaders: 'Gym Leaders', eliteFour: 'Elite Four & Champion',
     usefulNpcs: 'Useful NPCs', underConst: 'Under Construction', detailsConst: 'Details under construction...',
     desc: 'Description', location: 'Location', serviceCost: 'Service / Cost', cost: 'Cost', mainType: 'Main Type',
-    reward: 'Victory Reward', pkmnUsed: 'Pokémon used', settingsProfile: 'Settings & Profile',
+    reward: 'Victory Reward', pkmnUsed: 'Pokémon used', settingsProfile: 'Settings',
     myFavs: 'My Favorites', noFavs: 'No favorites saved yet.', settings: 'Settings', darkTheme: 'Dark Mode',
-    cries: 'Pokémon Cries', boldText: 'Bold Text', largerText: 'Larger Text', showWeight: 'Show Weight/Height in Dex',
+    cries: 'Pokémon Cries', boldText: 'Bold Text', largerText: 'Larger Text', showWeight: 'Weight/Height in Dex',
     language: 'Interface & Moves Language', about: 'About', navPkmn: 'Pokémon', navDex: 'Dex', navLeaders: 'Leaders', navSettings: 'Settings',
     weight: 'Weight', height: 'Height', gymRole: 'Gym Leader', eliteRole: 'Elite 4 Member', championRole: 'League Champion', npcRole: 'Useful NPC'
   }
@@ -181,17 +181,17 @@ export const SettingsProvider = ({ children }: any) => {
   );
 };
 
-const FavoritesContext = createContext<{ favorites: any[]; toggleFavorite: (p: any) => void; isFavorite: (id: number) => boolean; }>({
+const FavoritesContext = createContext<{ favorites: any[]; toggleFavorite: (p: any) => void; isFavorite: (id: any) => boolean; }>({
   favorites: [], toggleFavorite: () => {}, isFavorite: () => false,
 });
 export const FavoritesProvider = ({ children }: any) => {
   const [favorites, setFavorites] = useState<any[]>([]);
   useEffect(() => { AsyncStorage.getItem('@pokedex_favorites').then(stored => { if (stored) setFavorites(JSON.parse(stored)); }); }, []);
-  const toggleFavorite = async (pokemon: any) => {
-    const newFavorites = favorites.find(f => f.id === pokemon.id) ? favorites.filter(f => f.id !== pokemon.id) : [...favorites, pokemon];
+  const toggleFavorite = async (item: any) => {
+    const newFavorites = favorites.find(f => f.id === item.id) ? favorites.filter(f => f.id !== item.id) : [...favorites, item];
     setFavorites(newFavorites); await AsyncStorage.setItem('@pokedex_favorites', JSON.stringify(newFavorites));
   };
-  const isFavorite = (id: number) => favorites.some(f => f.id === id);
+  const isFavorite = (id: any) => favorites.some(f => f.id === id);
   return <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite }}>{children}</FavoritesContext.Provider>;
 };
 
@@ -898,18 +898,37 @@ function LideresScreen({ navigation }: any) {
 function LeaderDetailScreen({ route, navigation }: any) {
   const { theme } = useContext(ThemeContext);
   const { isBoldText, isLargeText, language } = useContext(SettingsContext);
+  const { toggleFavorite, isFavorite } = useContext(FavoritesContext);
   const { leader } = route.params;
   const isNpc = leader.role === 'useful_npc';
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
+
+  const favId = `npc_${leader.id}`;
+  const isFav = isFavorite(favId as any);
+
+  const handleToggleFavorite = () => {
+    toggleFavorite({
+      id: favId,
+      name: leader.name,
+      image: leader.image,
+      type: 'npc',
+      rawLeaderId: leader.id
+    });
+  };
 
   useEffect(() => { if (leader.availableGames && leader.availableGames.length > 0) setSelectedGame(leader.availableGames[0].id); }, [leader]);
 
   if (!leader.about) {
     return (
       <View style={{ flex: 1, backgroundColor: leader.color || '#92D2EF' }}>
-        <TouchableOpacity style={[styles.backButtonCircle, { position: 'absolute', top: 55, left: 22, zIndex: 10, backgroundColor: theme.cardBg }]} onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back" size={26} color={theme.textPrimary} />
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', position: 'absolute', top: 55, left: 22, right: 22, zIndex: 10 }}>
+          <TouchableOpacity style={[styles.backButtonCircle, { backgroundColor: theme.cardBg }]} onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back" size={26} color={theme.textPrimary} />
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.favoriteCircle, { backgroundColor: theme.cardBg }]} onPress={handleToggleFavorite}>
+            <Ionicons name={isFav ? "star" : "star-outline"} size={18} color={theme.textPrimary} />
+          </TouchableOpacity>
+        </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={[{ fontSize: 18, color: '#000' }, isBoldText ? { fontWeight: '900' } : { fontWeight: 'bold' }, isLargeText && { fontSize: 22 }]}>{t(language, 'detailsConst')}</Text>
         </View>
@@ -928,9 +947,14 @@ function LeaderDetailScreen({ route, navigation }: any) {
     <View style={{ flex: 1, backgroundColor: leader.color }}>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.dexScrollView}>
         <View style={styles.leaderScrollHeader}>
-          <TouchableOpacity style={[styles.backButtonCircle, styles.backButtonFixed, { backgroundColor: theme.cardBg }]} onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back" size={26} color={theme.textPrimary} />
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+            <TouchableOpacity style={[styles.backButtonCircle, { backgroundColor: theme.cardBg }]} onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={26} color={theme.textPrimary} />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.favoriteCircle, { backgroundColor: theme.cardBg }]} onPress={handleToggleFavorite}>
+              <Ionicons name={isFav ? "star" : "star-outline"} size={18} color={theme.textPrimary} />
+            </TouchableOpacity>
+          </View>
           <View style={styles.leaderImageWrapper}>
             <Image source={{ uri: leader.image }} style={styles.leaderMainImage} resizeMode="contain" />
           </View>
@@ -1042,7 +1066,6 @@ function AjustesScreen({ navigation }: any) {
             <Text style={[styles.settingsMenuText, { color: theme.textPrimary }, isBoldText && { fontWeight: '900' }, isLargeText && { fontSize: 20 }]}>{t(language, 'myFavs')} ({favorites.length})</Text>
             <Ionicons name={expandedSection === 'favoritos' ? "chevron-down" : "chevron-forward"} size={20} color={theme.textPrimary} />
           </TouchableOpacity>
-          
           {expandedSection === 'favoritos' && (
             <View style={styles.expandedContent}>
               {favorites.length === 0 ? (
@@ -1050,25 +1073,31 @@ function AjustesScreen({ navigation }: any) {
               ) : (
                 <View style={{ gap: 12 }}>
                   {favorites.map((fav) => (
-                    <TouchableOpacity key={fav.id} style={[styles.favoriteListCard, { backgroundColor: theme.searchBarBg }]} onPress={() => navigation.navigate('DexTab', { pokemonId: fav.id })}>
+                    <TouchableOpacity key={fav.id} style={[styles.favoriteListCard, { backgroundColor: theme.searchBarBg }]} onPress={() => {
+                        if (fav.type === 'npc') {
+                          const leaderFound = KANTO_CHARACTERS.find(c => c.id === fav.rawLeaderId);
+                          if (leaderFound) navigation.navigate('LideresTab', { screen: 'LeaderDetail', params: { leader: leaderFound } });
+                        } else {
+                          navigation.navigate('DexTab', { pokemonId: fav.id });
+                        }
+                    }}>
                       <Image source={{ uri: fav.image }} style={styles.favoriteListImage} />
                       <Text style={[styles.favoriteListName, { color: theme.textPrimary }, isBoldText && { fontWeight: '900' }, isLargeText && { fontSize: 20 }]}>{fav.name}</Text>
-                      <Text style={[styles.favoriteListId, { color: theme.textSecondary }, isBoldText && { fontWeight: 'bold' }, isLargeText && { fontSize: 16 }]}>#{fav.id.toString().padStart(3, '0')}</Text>
-                      <Ionicons name="chevron-forward" size={16} color={theme.textSecondary} />
+                      {fav.type !== 'npc' && (
+                        <Text style={[styles.favoriteListId, { color: theme.textSecondary }, isBoldText && { fontWeight: 'bold' }, isLargeText && { fontSize: 16 }]}>#{fav.id.toString().padStart(3, '0')}</Text>
+                      )}
+                      <Ionicons name="chevron-forward" size={16} color={theme.textSecondary} style={fav.type === 'npc' ? { marginLeft: 'auto' } : {}} />
                     </TouchableOpacity>
                   ))}
                 </View>
               )}
             </View>
           )}
-
           <View style={[styles.settingsSeparator, { backgroundColor: theme.border }]} />
-          
           <TouchableOpacity style={styles.settingsMenuItem} onPress={() => toggleSection('configuracoes')}>
             <Text style={[styles.settingsMenuText, { color: theme.textPrimary }, isBoldText && { fontWeight: '900' }, isLargeText && { fontSize: 20 }]}>{t(language, 'settings')}</Text>
             <Ionicons name={expandedSection === 'configuracoes' ? "chevron-down" : "chevron-forward"} size={20} color={theme.textPrimary} />
           </TouchableOpacity>
-          
           {expandedSection === 'configuracoes' && (
             <View style={styles.expandedConfigContent}>
               <View style={styles.configRow}>
@@ -1078,7 +1107,6 @@ function AjustesScreen({ navigation }: any) {
                 </View>
                 <Switch trackColor={{ false: "#D1D1D6", true: "#34C759" }} onValueChange={toggleTheme} value={isDark} />
               </View>
-              
               <View style={styles.configRow}>
                 <View style={styles.configInfo}>
                   <Ionicons name="volume-high" size={20} color={theme.textSecondary} />
@@ -1086,7 +1114,6 @@ function AjustesScreen({ navigation }: any) {
                 </View>
                 <Switch trackColor={{ false: "#D1D1D6", true: "#34C759" }} onValueChange={toggleSound} value={soundEnabled} />
               </View>
-              
               <View style={styles.configRow}>
                 <View style={styles.configInfo}>
                   <Ionicons name="text" size={20} color={theme.textSecondary} />
@@ -1094,7 +1121,6 @@ function AjustesScreen({ navigation }: any) {
                 </View>
                 <Switch trackColor={{ false: "#D1D1D6", true: "#34C759" }} onValueChange={toggleBoldText} value={isBoldText} />
               </View>
-              
               <View style={styles.configRow}>
                 <View style={styles.configInfo}>
                   <Ionicons name="add-circle-outline" size={20} color={theme.textSecondary} />
@@ -1102,7 +1128,6 @@ function AjustesScreen({ navigation }: any) {
                 </View>
                 <Switch trackColor={{ false: "#D1D1D6", true: "#34C759" }} onValueChange={toggleLargeText} value={isLargeText} />
               </View>
-
               <View style={styles.configRow}>
                 <View style={styles.configInfo}>
                   <Ionicons name="barbell-outline" size={20} color={theme.textSecondary} />
@@ -1110,7 +1135,6 @@ function AjustesScreen({ navigation }: any) {
                 </View>
                 <Switch trackColor={{ false: "#D1D1D6", true: "#34C759" }} onValueChange={toggleShowWeight} value={showWeight} />
               </View>
-              
               <View style={styles.configColumn}>
                 <Text style={[styles.configLabelMargin, { color: theme.textPrimary }, isBoldText && { fontWeight: '900' }, isLargeText && { fontSize: 18 }]}>{t(language, 'language')}</Text>
                 <View style={[styles.segmentedControl, { backgroundColor: theme.border }]}>
@@ -1123,24 +1147,20 @@ function AjustesScreen({ navigation }: any) {
               </View>
             </View>
           )}
-
           <View style={[styles.settingsSeparator, { backgroundColor: theme.border }]} />
-          
           <TouchableOpacity style={styles.settingsMenuItem} onPress={() => toggleSection('sobre')}>
             <Text style={[styles.settingsMenuText, { color: theme.textPrimary }, isBoldText && { fontWeight: '900' }, isLargeText && { fontSize: 20 }]}>{t(language, 'about')}</Text>
             <Ionicons name={expandedSection === 'sobre' ? "chevron-down" : "chevron-forward"} size={20} color={theme.textPrimary} />
           </TouchableOpacity>
-          
           {expandedSection === 'sobre' && (
             <View style={styles.expandedContent}>
-              <Text style={[{ color: theme.textSecondary, lineHeight: 24, marginTop: 10, textAlign: 'left' }, isBoldText && { fontWeight: 'bold' }, isLargeText && { fontSize: 18 }]}>
+              <Text style={[{ color: theme.textSecondary, lineHeight: 24, marginTop: 10, textAlign: 'justify' }, isBoldText && { fontWeight: 'bold' }, isLargeText && { fontSize: 18 }]}>
                 {language === 'PT-BR' 
-                  ? 'MoveDex v1.0.0\nDesenvolvido em React Native por \nFábio Vinnicius' 
-                  : 'MoveDex v1.0.0\nDeveloped in React Native by \nFábio Vinnicius'}
+                  ? 'O MoveDex (v1.0.0) foi criado por e para fãs de Pokémon. O objetivo é fornecer as informações mais precisas e rápidas para te ajudar nas suas batalhas, desde vantagens de tipos até as estratégias dos Líderes de Ginásio.\n\nEste aplicativo foi desenvolvido em React Native e utiliza dados abertos da PokeAPI.\n\nTodos os direitos das imagens e sons pertencem à Nintendo, The Pokémon Company e Game Freak. Feito com muita dedicação!' 
+                  : 'MoveDex (v1.0.0) was created by and for Pokémon fans. The goal is to provide the fastest and most accurate information to help you in your battles, from type advantages to Gym Leader strategies.\n\nThis app was built with React Native and utilizes open data from PokeAPI.\n\nAll image and sound rights belong to Nintendo, The Pokémon Company, and Game Freak. Made with immense dedication!'}
               </Text>
             </View>
           )}
-
         </View>
       </ScrollView>
     </View>
@@ -1178,12 +1198,14 @@ function BottomNavigation({ state, descriptors, navigation }: any) {
 
 function PokemonRow({ pokemon, onPress, theme, isBoldText, isLargeText, language }: any) {
   const primaryType = pokemon.types ? pokemon.types[0] : null;
-  const bgColor = primaryType ? getTypeData(primaryType, language).color : theme.cardBg;
+  const baseColor = primaryType ? getTypeData(primaryType, language).color : theme.cardBg;
+  const bgColor = primaryType ? `${baseColor}33` : theme.cardBg;
+  
   return (
     <TouchableOpacity style={[styles.pokemonCardRow, { backgroundColor: bgColor }]} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.pokemonCardInfo}>
-        <Text style={[styles.pokemonCardId, isBoldText && { fontWeight: 'bold' }, isLargeText && { fontSize: 16 }]}>#{pokemon.id}</Text>
-        <Text style={[styles.pokemonCardName, isBoldText && { fontWeight: '900' }, isLargeText && { fontSize: 28 }]}>{pokemon.name}</Text>
+        <Text style={[styles.pokemonCardId, { color: theme.textSecondary }, isBoldText && { fontWeight: 'bold' }, isLargeText && { fontSize: 16 }]}>#{pokemon.id}</Text>
+        <Text style={[styles.pokemonCardName, { color: theme.textPrimary }, isBoldText && { fontWeight: '900' }, isLargeText && { fontSize: 28 }]}>{pokemon.name}</Text>
         {pokemon.types && (
           <View style={styles.pokemonCardBadges}>
             {pokemon.types.map((tId: string, i: number) => {
@@ -1248,8 +1270,8 @@ const styles = StyleSheet.create({
   filterPillText: { fontSize: 13, fontWeight: '600' },
   pokemonCardRow: { flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20, paddingRight: 10, paddingVertical: 20, borderRadius: 20, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 6, elevation: 2, height: 130 },
   pokemonCardInfo: { justifyContent: 'center', flex: 1 },
-  pokemonCardId: { fontSize: 14, fontWeight: 'bold', color: 'rgba(0,0,0,0.4)', marginBottom: 4 },
-  pokemonCardName: { fontSize: 24, fontWeight: 'bold', color: '#1A1A1A', marginBottom: 10 },
+  pokemonCardId: { fontSize: 14, fontWeight: 'bold', marginBottom: 4 },
+  pokemonCardName: { fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
   pokemonCardBadges: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   pokemonCardImageWrapper: { width: 100, height: 100, justifyContent: 'center', alignItems: 'center' },
   pokemonCardImage: { width: 120, height: 120, position: 'absolute', right: -10, top: -20 },
